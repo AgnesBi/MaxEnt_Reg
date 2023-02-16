@@ -1,0 +1,578 @@
+			Ident (asp)	Ident (voice)	Ident (asp)/_V	Ident (voice)/_V	*[+v][-v][+v]	*dh	*[-son/+voice]	*aspiration
+			Id (asp)	Id (voice)	Id (asp)/_V	Id (voice)/_V	*[+v][-v][+v]	*dh	*[-son/+voice]	*asp
+ta	ta	1								
+	da			1		1			1	
+	tha		1		1					1
+	dha		1	1	1	1		1	1	1
+tha	tha	1								1
+	ta		1		1					
+	da		1	1	1	1			1	
+	dha			1		1		1	1	1
+da	ta			1		1				
+	da								1	
+	tha		1	1	1	1				1
+	dha		1		1			1	1	1
+dha	ta		1	1	1	1				
+	da		1		1				1	
+	tha			1		1				1
+	dha							1	1	1
+ada	ada	1							1	
+	ata			1		1	1			
+	atha		1	1	1	1	1			1
+	adha		1		1			1	1	1
+atha	atha	1					1			1
+	ata		1		1		1			
+	ada		1	1	1	1			1	
+	adha			1		1		1	1	1
+ata	ada			1		1			1	
+	ata						1			
+	atha		1		1		1			1
+	adha		1	1	1	1		1	1	1
+adha	atha			1		1	1			1
+	ata		1	1	1	1	1			
+	ada		1		1				1	
+	adha							1	1	1
+at	at	1								
+	ad			1					1	
+	ath		1							1
+	adh		1	1				1	1	1
+ad	at			1						
+	ad								1	
+	ath		1	1						1
+	adh		1					1	1	1
+ath	at		1							
+	ad		1	1					1	
+	ath									1
+	adh			1				1	1	1
+adh	at		1	1						
+	ad		1						1	
+	ath			1						1
+	adh							1	1	1
+tada	tada	1							1	
+	tata			1		1	1			
+	tatha		1	1	1	1	1			1
+	tadha		1		1			1	1	1
+	data			2		2	1		1	
+	dada			1		1			2	
+	datha		1	2	1	2	1		1	1
+	dadha		1	1	1	1		1	2	1
+	thata		1	1	1	1	1			1
+	thada		1		1				1	1
+	thatha		2	1	2	1	1			2
+	thadha		2		2			1	1	2
+	dhata		1	2	1	2	1	1	1	1
+	dhada		1	1	1	1		1	2	1
+	dhatha		2	2	2	2	1	1	1	2
+	dhadha		2	1	2	1		2	2	2
+tatha	tatha	1					1			1
+	tata		1		1		1			
+	tada		1	1	1	1			1	
+	tadha			1		1		1	1	1
+	data		1	1	1	1	1		1	
+	dada		1	2	1	2			2	
+	datha			1		1	1		1	1
+	dadha			2		2		1	2	1
+	thata		2		2		1			1
+	thada		2	1	2	1			1	1
+	thatha		1		1		1			2
+	thadha		1	1	1	1		1	1	2
+	dhata		2	1	2	1	1	1	1	1
+	dhada		2	2	2	2		1	2	1
+	dhatha		1	1	1	1	1	1	1	2
+	dhadha		1	2	1	2		2	2	2
+thada	thada	1							1	1
+	tata		1	1	1	1	1			
+	tada		1		1				1	
+	tatha		2	1	2	1	1			1
+	tadha		2		2			1	1	1
+	data		1	2	1	2	1		1	
+	dada		1	1	1	1			2	
+	datha		2	2	2	2	1		1	1
+	dadha		2	1	2	1		1	2	1
+	thata			1		1	1			1
+	thatha		1	1	1	1	1			2
+	thadha		1		1			1	1	2
+	dhata			2		2	1	1	1	1
+	dhada			1		1		1	2	1
+	dhatha		1	2	1	2	1	1	1	2
+	dhadha		1	1	1	1		2	2	2
+thatha	thatha	1					1			2
+	tata		2		2		1			
+	tada		2	1	2	1			1	
+	tatha		1		1		1			1
+	tadha		1	1	1	1		1	1	1
+	data		2	1	2	1	1		1	
+	dada		2	2	2	2			2	
+	datha		1	1	1	1	1		1	1
+	dadha		1	2	1	2		1	2	1
+	thata		1		1		1			1
+	thada		1	1	1	1			1	1
+	thadha			1		1		1	1	2
+	dhata		1	1	1	1	1	1	1	1
+	dhada		1	2	1	2		1	2	1
+	dhatha			1		1	1	1	1	2
+	dhadha			2		2		2	2	2
+tat	tat	1								
+	tad			1					1	
+	tath		1							1
+	tadh		1	1				1	1	1
+	dat			1		1			1	
+	dad			2		1			2	
+	dath		1	1		1			1	1
+	dadh		1	2		1		1	2	1
+	that		1		1					1
+	thad		1	1	1				1	1
+	thath		2		1					2
+	thadh		2	1	1			1	1	2
+	dhat		1	1	1	1		1	1	1
+	dhad		1	2	1	1		1	2	1
+	dhath		2	1	1	1		1	1	2
+	dhadh		2	2	1	1		2	2	2
+that	that	1								1
+	tat		1		1					
+	tad		1	1	1				1	
+	tath		2		1					1
+	tadh		2	1	1			1	1	1
+	dat		1	1	1	1			1	
+	dad		1	2	1	1			2	
+	dath		2	1	1	1			1	1
+	dadh		2	2	1	1		1	2	1
+	thad			1					1	1
+	thath		1							2
+	thadh		1	1				1	1	2
+	dhat			1		1		1	1	1
+	dhad			2		1		1	2	1
+	dhath		1	1		1		1	1	2
+	dhadh		1	2		1		2	2	2
+tata	tada			1		1			1	
+	tata						1			
+	tatha		1		1		1			1
+	tadha		1	1	1	1		1	1	1
+	data			1		1	1		1	
+	dada			2		2			2	
+	datha		1	1	1	1	1		1	1
+	dadha		1	2	1	2		1	2	1
+	thata		1		1		1			1
+	thada		1	1	1	1			1	1
+	thatha		2		2		1			2
+	thadha		2	1	2	1		1	1	2
+	dhata		1	1	1	1	1	1	1	1
+	dhada		1	2	1	2		1	2	1
+	dhatha		2	1	2	1	1	1	1	2
+	dhadha		2	2	2	2		2	2	2
+tadha	tada		1		1				1	
+	tata		1	1	1	1	1			
+	tatha			1		1	1			1
+	tadha							1	1	1
+	data		1	2	1	2	1		1	
+	dada		1	1	1	1			2	
+	datha			2		2	1		1	1
+	dadha			1		1		1	2	1
+	thata		2	1	2	1	1			1
+	thada		2		2				1	1
+	thatha		1	1	1	1	1			2
+	thadha		1		1			1	1	2
+	dhata		2	2	2	2	1	1	1	1
+	dhada		2	1	2	1		1	2	1
+	dhatha		1	2	1	2	1	1	1	2
+	dhadha		1	1	1	1		2	2	2
+data	tada			2		2			1	
+	tata			1		1	1			
+	tatha		1	1	1	1	1			1
+	tadha		1	2	1	2		1	1	1
+	data						1		1	
+	dada			1		1			2	
+	datha		1		1		1		1	1
+	dadha		1	1	1	1		1	2	1
+	thata		1	1	1	1	1			1
+	thada		1	2	1	2			1	1
+	thatha		2	1	2	1	1			2
+	thadha		2	2	2	2		1	1	2
+	dhata		1		1		1	1	1	1
+	dhada		1	1	1	1		1	2	1
+	dhatha		2		2		1	1	1	2
+	dhadha		2	1	2	1		2	2	2
+dada	tada			1		1			1	
+	tata			2		2	1			
+	tatha		1	2	1	2	1			1
+	tadha		1	1	1	1		1	1	1
+	data			1		1	1		1	
+	dada								2	
+	datha		1	1	1	1	1		1	1
+	dadha		1		1			1	2	1
+	thata		1	2	1	2	1			1
+	thada		1	1	1	1			1	1
+	thatha		2	2	2	2	1			2
+	thadha		2	1	2	1		1	1	2
+	dhata		1	1	1	1	1	1	1	1
+	dhada		1		1			1	2	1
+	dhatha		2	1	2	1	1	1	1	2
+	dhadha		2		2			2	2	2
+datha	tada		1	2	1	2			1	
+	tata		1	1	1	1	1			
+	tatha			1		1	1			1
+	tadha			2		2		1	1	1
+	data		1		1		1		1	
+	dada		1	1	1	1			2	
+	datha						1		1	1
+	dadha			1		1		1	2	1
+	thata		2	1	2	1	1			1
+	thada		2	2	2	2			1	1
+	thatha		1	1	1	1	1			2
+	thadha		1	2	1	2		1	1	2
+	dhata		2		2		1	1	1	1
+	dhada		2	1	2	1		1	2	1
+	dhatha		1		1		1	1	1	2
+	dhadha		1	1	1	1		2	2	2
+dadha	tada		1	1	1	1			1	
+	tata		1	2	1	2	1			
+	tatha			2		2	1			1
+	tadha			1		1		1	1	1
+	data		1	1	1	1	1		1	
+	dada		1		1				2	
+	datha			1		1	1		1	1
+	dadha							1	2	1
+	thata		2	2	2	2	1			1
+	thada		2	1	2	1			1	1
+	thatha		1	2	1	2	1			2
+	thadha		1	1	1	1		1	1	2
+	dhata		2	1	2	1	1	1	1	1
+	dhada		2		2			1	2	1
+	dhatha		1	1	1	1	1	1	1	2
+	dhadha		1		1			2	2	2
+thata	tada		1	1	1	1			1	
+	tata		1		1		1			
+	tatha		2		2		1			1
+	tadha		2	1	2	1		1	1	1
+	data		1	1	1	1	1		1	
+	dada		1	2	1	2			2	
+	datha		2	1	2	1	1		1	1
+	dadha		2	2	2	2		1	2	1
+	thata						1			1
+	thada			1		1			1	1
+	thatha		1		1		1			2
+	thadha		1	1	1	1		1	1	2
+	dhata			1		1	1	1	1	1
+	dhada			2		2		1	2	1
+	dhatha		1	1	1	1	1	1	1	2
+	dhadha		1	2	1	2		2	2	2
+thatha	tada		2	1	2	1			1	
+	tata		2		2		1			
+	tatha		1		1		1			1
+	tadha		1	1	1	1		1	1	1
+	data		2	1	2	1	1		1	
+	dada		2	2	2	2			2	
+	datha		1	1	1	1	1		1	1
+	dadha		1	2	1	2		1	2	1
+	thata		1		1		1			1
+	thada		1	1	1	1			1	1
+	thatha						1			2
+	thadha			1		1		1	1	2
+	dhata		1	1	1	1	1	1	1	1
+	dhada		1	2	1	2		1	2	1
+	dhatha			1		1	1	1	1	2
+	dhadha			2		2		2	2	2
+thadha	tada		2		2				1	
+	tata		2	1	2	1	1			
+	tatha		1	1	1	1	1			1
+	tadha		1		1			1	1	1
+	data		2	2	2	2	1		1	
+	dada		2	1	2	1			2	
+	datha		1	2	1	2	1		1	1
+	dadha		1	1	1	1		1	2	1
+	thata		1	1	1	1	1			1
+	thada		1		1				1	1
+	thatha			1		1	1			2
+	thadha							1	1	2
+	dhata		1	2	1	2	1	1	1	1
+	dhada		1	1	1	1		1	2	1
+	dhatha			2		2	1	1	1	2
+	dhadha			1		1		2	2	2
+dhata	tada		1	2	1	2			1	
+	tata		1	1	1	1	1			
+	tatha		2	1	2	1	1			1
+	tadha		2	2	2	2		1	1	1
+	data		1		1		1		1	
+	dada		1	1	1	1			2	
+	datha		2		2		1		1	1
+	dadha		2	1	2	1		1	2	1
+	thata			1		1	1			1
+	thada			2		2			1	1
+	thatha		1	1	1	1	1			2
+	thadha		1	2	1	2		1	1	2
+	dhata						1	1	1	1
+	dhada			1		1		1	2	1
+	dhatha		1		1		1	1	1	2
+	dhadha		1	1	1	1		2	2	2
+dhada	tada		1	1	1	1			1	
+	tata		1	2	1	2	1			
+	tatha		2	2	2	2	1			1
+	tadha		2	1	2	1		1	1	1
+	data		1	1	1	1	1		1	
+	dada		1		1				2	
+	datha		2	1	2	1	1		1	1
+	dadha		2		2			1	2	1
+	thata			2		2	1			1
+	thada			1		1			1	1
+	thatha		1	2	1	2	1			2
+	thadha		1	1	1	1		1	1	2
+	dhata			1		1	1	1	1	1
+	dhada							1	2	1
+	dhatha		1	1	1	1	1	1	1	2
+	dhadha		1		1			2	2	2
+dhatha	tada		2	2	2	2			1	
+	tata		2	1	2	1	1			
+	tatha		1	1	1	1	1			1
+	tadha		1	2	1	2		1	1	1
+	data		2		2		1		1	
+	dada		2	1	2	1			2	
+	datha		1		1		1		1	1
+	dadha		1	1	1	1		1	2	1
+	thata		1	1	1	1	1			1
+	thada		1	2	1	2			1	1
+	thatha			1		1	1			2
+	thadha			2		2		1	1	2
+	dhata		1		1		1	1	1	1
+	dhada		1	1	1	1		1	2	1
+	dhatha						1	1	1	2
+	dhadha			1		1		2	2	2
+dhadha	tada		2	1	2	1			1	
+	tata		2	2	2	2	1			
+	tatha		1	2	1	2	1			1
+	tadha		1	1	1	1		1	1	1
+	data		2	1	2	1	1		1	
+	dada		2		2				2	
+	datha		1	1	1	1	1		1	1
+	dadha		1		1			1	2	1
+	thata		1	2	1	2	1			1
+	thada		1	1	1	1			1	1
+	thatha			2		2	1			2
+	thadha			1		1		1	1	2
+	dhata		1	1	1	1	1	1	1	1
+	dhada		1		1			1	2	1
+	dhatha			1		1	1	1	1	2
+	dhadha							2	2	2
+tad	tat			1						
+	tad								1	
+	tath		1	1						1
+	tadh		1					1	1	1
+	dat			2		1			1	
+	dad			1		1			2	
+	dath		1	2		1			1	1
+	dadh		1	1		1		1	2	1
+	that		1	1	1					1
+	thad		1		1				1	1
+	thath		2	1	1					2
+	thadh		2		1			1	1	2
+	dhat		1	2	1	1		1	1	1
+	dhad		1	1	1	1		1	2	1
+	dhath		2	2	1	1		1	1	2
+	dhadh		2	1	1	1		2	2	2
+tath	tat		1							
+	tad		1	1					1	
+	tath									1
+	tadh			1				1	1	1
+	dat		1	1		1			1	
+	dad		1	2		1			2	
+	dath			1		1			1	1
+	dadh			2		1		1	2	1
+	that		2		1					1
+	thad		2	1	1				1	1
+	thath		1		1					2
+	thadh		1	1	1			1	1	2
+	dhat		2	1	1	1		1	1	1
+	dhad		2	2	1	1		1	2	1
+	dhath		1	1	1	1		1	1	2
+	dhadh		1	2	1	1		2	2	2
+tadh	tat		1	1						
+	tad		1						1	
+	tath			1						1
+	tadh							1	1	1
+	dat		1	2		1			1	
+	dad		1	1		1			2	
+	dath			2		1			1	1
+	dadh			1		1		1	2	1
+	that		2	1	1					1
+	thad		2		1				1	1
+	thath		1	1	1					2
+	thadh		1		1			1	1	2
+	dhat		2	2	1	1		1	1	1
+	dhad		2	1	1	1		1	2	1
+	dhath		1	2	1	1		1	1	2
+	dhadh		1	1	1	1		2	2	2
+dat	tat			1		1				
+	tad			2		1			1	
+	tath		1	1		1				1
+	tadh		1	2		1		1	1	1
+	dat								1	
+	dad			1					2	
+	dath		1						1	1
+	dadh		1	1				1	2	1
+	that		1	1	1	1				1
+	thad		1	2	1	1			1	1
+	thath		2	1	1	1				2
+	thadh		2	2	1	1		1	1	2
+	dhat		1		1			1	1	1
+	dhad		1	1	1			1	2	1
+	dhath		2		1			1	1	2
+	dhadh		2	1	1			2	2	2
+dad	tat			2		1				
+	tad			1		1			1	
+	tath		1	2		1				1
+	tadh		1	1		1		1	1	1
+	dat			1					1	
+	dad								2	
+	dath		1	1					1	1
+	dadh		1					1	2	1
+	that		1	2	1	1				1
+	thad		1	1	1	1			1	1
+	thath		2	2	1	1				2
+	thadh		2	1	1	1		1	1	2
+	dhat		1	1	1			1	1	1
+	dhad		1		1			1	2	1
+	dhath		2	1	1			1	1	2
+	dhadh		2		1			2	2	2
+dath	tat		1	1		1				
+	tad		1	2		1			1	
+	tath			1		1				1
+	tadh			2		1		1	1	1
+	dat		1						1	
+	dad		1	1					2	
+	dath								1	1
+	dadh			1				1	2	1
+	that		2	1	1	1				1
+	thad		2	2	1	1			1	1
+	thath		1	1	1	1				2
+	thadh		1	2	1	1		1	1	2
+	dhat		2		1			1	1	1
+	dhad		2	1	1			1	2	1
+	dhath		1		1			1	1	2
+	dhadh		1	1	1			2	2	2
+dadh	tat		1	2		1				
+	tad		1	1		1			1	
+	tath			2		1				1
+	tadh			1		1		1	1	1
+	dat		1	1					1	
+	dad		1						2	
+	dath			1					1	1
+	dadh							1	2	1
+	that		2	2	1	1				1
+	thad		2	1	1	1			1	1
+	thath		1	2	1	1				2
+	thadh		1	1	1	1		1	1	2
+	dhat		2	1	1			1	1	1
+	dhad		2		1			1	2	1
+	dhath		1	1	1			1	1	2
+	dhadh		1		1			2	2	2
+thad	tat		1	1	1					
+	tad		1		1				1	
+	tath		2	1	1					1
+	tadh		2		1			1	1	1
+	dat		1	2	1	1			1	
+	dad		1	1	1	1			2	
+	dath		2	2	1	1			1	1
+	dadh		2	1	1	1		1	2	1
+	that			1						1
+	thad								1	1
+	thath		1	1						2
+	thadh		1					1	1	2
+	dhat			2		1		1	1	1
+	dhad			1		1		1	2	1
+	dhath		1	2		1		1	1	2
+	dhadh		1	1		1		2	2	2
+thath	tat		2		1					
+	tad		2	1	1				1	
+	tath		1		1					1
+	tadh		1	1	1			1	1	1
+	dat		2	1	1	1			1	
+	dad		2	2	1	1			2	
+	dath		1	1	1	1			1	1
+	dadh		1	2	1	1		1	2	1
+	that		1							1
+	thad		1	1					1	1
+	thath									2
+	thadh			1				1	1	2
+	dhat		1	1		1		1	1	1
+	dhad		1	2		1		1	2	1
+	dhath			1		1		1	1	2
+	dhadh			2		1		2	2	2
+thadh	tat		2	1	1					
+	tad		2		1				1	
+	tath		1	1	1					1
+	tadh		1		1			1	1	1
+	dat		2	2	1	1			1	
+	dad		2	1	1	1			2	
+	dath		1	2	1	1			1	1
+	dadh		1	1	1	1		1	2	1
+	that		1	1						1
+	thad		1						1	1
+	thath			1						2
+	thadh							1	1	2
+	dhat		1	2		1		1	1	1
+	dhad		1	1		1		1	2	1
+	dhath			2		1		1	1	2
+	dhadh			1		1		2	2	2
+dhat	tat		1	1	1	1				
+	tad		1	2	1	1			1	
+	tath		2	1	1	1				1
+	tadh		2	2	1	1		1	1	1
+	dat		1		1				1	
+	dad		1	1	1				2	
+	dath		2		1				1	1
+	dadh		2	1	1			1	2	1
+	that			1		1				1
+	thad			2		1			1	1
+	thath		1	1		1				2
+	thadh		1	2		1		1	1	2
+	dhat							1	1	1
+	dhad			1				1	2	1
+	dhath		1					1	1	2
+	dhadh		1	1				2	2	2
+dhad	tat		1	2	1	1				
+	tad		1	1	1	1			1	
+	tath		2	2	1	1				1
+	tadh		2	1	1	1		1	1	1
+	dat		1	1	1				1	
+	dad		1		1				2	
+	dath		2	1	1				1	1
+	dadh		2		1			1	2	1
+	that			2		1				1
+	thad			1		1			1	1
+	thath		1	2		1				2
+	thadh		1	1		1		1	1	2
+	dhat			1				1	1	1
+	dhad							1	2	1
+	dhath		1	1				1	1	2
+	dhadh		1					2	2	2
+dhath	tat		2	1	1	1				
+	tad		2	2	1	1			1	
+	tath		1	1	1	1				1
+	tadh		1	2	1	1		1	1	1
+	dat		2		1				1	
+	dad		2	1	1				2	
+	dath		1		1				1	1
+	dadh		1	1	1			1	2	1
+	that		1	1		1				1
+	thad		1	2		1			1	1
+	thath			1		1				2
+	thadh			2		1		1	1	2
+	dhat		1					1	1	1
+	dhad		1	1				1	2	1
+	dhath							1	1	2
+	dhadh			1				2	2	2
+dhadh	tat		2	2	1	1				
+	tad		2	1	1	1			1	
+	tath		1	2	1	1				1
+	tadh		1	1	1	1		1	1	1
+	dat		2	1	1				1	
+	dad		2		1				2	
+	dath		1	1	1				1	1
+	dadh		1		1			1	2	1
+	that		1	2		1				1
+	thad		1	1		1			1	1
+	thath			2		1				2
+	thadh			1		1		1	1	2
+	dhat		1	1				1	1	1
+	dhad		1					1	2	1
+	dhath			1				1	1	2
+	dhadh							2	2	2
