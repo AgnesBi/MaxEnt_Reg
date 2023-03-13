@@ -1,32 +1,100 @@
+## Type hint and labelling
+from typing import Union
+
+## Matrix manipulation
 import numpy as np
+
+
+""" =============================================================================== 
+                    REGULARIZATION CLASS DEFINITION 
+=============================================================================== """
+
 
 class Regularization:
 
-    """ ==================== INITIALIZATION ==================================== """
-    def __init__(self, sigma: float, mu: float):
-        self.sigma = sigma
-        self.mu = mu
+    """==================== GRADIENTS ========================================="""
 
-    """ ==================== GRADIENTS ========================================= """
-    def grad_uni(self, weights: list[float], names: list[str]):
-        """Returns the gradient given a flat prior; otherwise, 0
-        """
+    """ Static methods for computing the gradient given a set of weights.
+    Unless specified by the paramemter `type`, each method expects there 
+    only two be two constraint types: markedness constraints ("M") and 
+    faithfulness constraints ("F")
+    """
+
+    @staticmethod
+    def grad_uni():
+        """Returns the gradient given a flat prior, or in other words, 0"""
         return 0
 
-    def grad_nrm(self, weights: list[float], names: list[str]):
-        """Returns the gradient of the normal objective function
+    @staticmethod
+    def grad_nrm(
+        weights: list[float],
+        names: list[str],
+        mu: Union[float, dict[str, float]],
+        sigma: Union[float, dict[str, float]],
+    ):
+        """Returns the gradient of a prior towards a target weight.
+        Generality for both individual types -- e.g. M > F -- versus
+        over all weights -- e.g. M = F = mu
         """
-        pass
 
-    def grad_sum(self, weights: list[float], names: list[str]):
-        """Returns the gradient of the summed differences objective function
+        ## Retrieve the type of the mu and sigma
+        tMu = type(mu)
+        tSigma = type(sigma)
+
+        ## Check that the mu and sigma are of the same type
+        assert (
+            tMu == tSigma
+        ), "Type mismatch: type of mu and sigma are {tMu} and {tSigma}"
+
+        ## Initialize the weight gradient
+        wGrad = np.zeros(weights.shape)
+
+        ## If mu is a float, calculate the same prior over all weights
+        if tMu == float:
+            wGrad = (weights - mu) / (sigma ** 2)
+        
+        ## Otherwise, if mu is a dictionary, calculate the prior over 
+        ## each type. Assume only markedness and faithfulness constraints
+        elif tMu == dict:
+            
+            ## Get the indices of the markedness and faithfulness constraints
+            mIdx = Regularization.get_mIdx(names)
+            fIdx = ~mIdx
+
+            ## Update the gradients of the weights
+            wGrad[mIdx] = (weights[mIdx] - mu["M"]) / (sigma["M"] ** 2)
+            wGrad[fIdx] = (weights[fIdx] - mu["F"]) / (sigma["F"] ** 2)
+
+        ## Return the gradient
+        return wGrad
+
+    @staticmethod
+    def grad_sum(
+        weights: list[float],
+        names: list[str],
+        mu: float,
+        sigma: float,
+    ):
+        """Returns the gradient of a prior towards a target difference
+        over constraint types -- e.g. markedness.sum() > faithfulness.sum()
         """
+
+        ## Retrieve the type of the mu and sigma
+        tMu = type(mu)
+        tSigma = type(sigma)
+
+        ## Under this regularization, we expect only a single mu and sigma
+        assert (
+            tMu == float and tSigma == float
+        ), f"Got type {tMu} and {tSigma} instead of float"
 
         ## Check to make sure the constraint weights and shapes are the same shape
-        assert weights.shape == names.shape, "Constraint weights and names not equal shape"
+        assert (
+            weights.shape == names.shape
+        ), f"Weights {weights.shape} and names {names.shape} not of equal shape"
 
         ## Get the indices of the markedness and faithfulness constraints
-        mIdx = self.get_mIdx(names)
+        mIdx = Regularization.get_mIdx(names)
         fIdx = ~mIdx
 
         ## Sum the constraint weights of the markedness vs faithfulness constraints
@@ -34,23 +102,32 @@ class Regularization:
         fSummed = weights[fIdx].sum()
 
         ## Calculate the gradient of the markedness vs faithfulness constraints
-        mGrad = (mSummed - fSummed - self.mu) / (self.sigma ** 2)
-        fGrad = (fSummed - mSummed + self.mu) / (self.sigma ** 2)
+        mGrad = (mSummed - fSummed - mu) / (sigma**2)
+        fGrad = (fSummed - mSummed + mu) / (sigma**2)
 
-        ## Return the expected gradients for each weight
+        ## Update the gradients of the weights
         wGrad = np.zeros(weights.shape)
         wGrad[mIdx] += mGrad
         wGrad[fIdx] += fGrad
 
+        ## Return the gradient
         return wGrad
 
-    def grad_ind(self, weights, names):
+    @staticmethod
+    def grad_ind(
+        weights: list[float],
+        names: list[str],
+        types: dict[str, str],
+        mu: Union[float, dict[str, float]],
+        sigma: Union[float, dict[str, float]],
+    ):
         """Returns the gradient of the differences between the markedness constraints
         and the faithfulness constraint of greatest weight
         """
-        pass 
-    
+        pass
+
     """ ==================== CLASS METHODS ===================================== """
+
     def get_mIdx(cls, names: list[str]):
         return np.char.find(names, "*") != -1
 
