@@ -118,11 +118,25 @@ class Regularization:
         weights: list[float],
         names: list[str],
         types: dict[str, str],
-        mu: Union[float, dict[str, float]],
-        sigma: Union[float, dict[str, float]],
+        mu: float,
+        sigma: float,
     ):
-        """Returns the gradient of the differences between the markedness constraints
-        and the faithfulness constraint of greatest weight
+        """Returns the gradient of a prior towards a target difference
+        between the markedness constraints and the faithfulness 
+        constraint of greatest weight
+        """
+        pass
+
+    @staticmethod
+    def grad_hrc(
+        weights: list[float],
+        names: list[str],
+        types: dict[str, str],
+        mu: dict[str, float],
+        sigma: dict[str, float],
+    ):
+        """Returns the gradient of a prior towards a target difference
+        between a hierarchy of constraints -- e.g. C1 > C2 > C3
         """
         pass
 
