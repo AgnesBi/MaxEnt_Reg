@@ -8,12 +8,17 @@ class Regularization:
         self.mu = mu
 
     """ ==================== GRADIENTS ========================================= """
-    def grad_uniform(self, weights: list[float], names: list[str]):
+    def grad_uni(self, weights: list[float], names: list[str]):
         """Returns the gradient given a flat prior; otherwise, 0
         """
         return 0
 
-    def grad_summed(self, weights: list[float], names: list[str]):
+    def grad_nrm(self, weights: list[float], names: list[str]):
+        """Returns the gradient of the normal objective function
+        """
+        pass
+
+    def grad_sum(self, weights: list[float], names: list[str]):
         """Returns the gradient of the summed differences objective function
         """
 
@@ -39,8 +44,11 @@ class Regularization:
 
         return wGrad
 
-    def grad_individual(self, weights, names):
-        assert weights.shape == names.shape, "Constraint weights and names not equal"
+    def grad_ind(self, weights, names):
+        """Returns the gradient of the differences between the markedness constraints
+        and the faithfulness constraint of greatest weight
+        """
+        pass 
     
     """ ==================== CLASS METHODS ===================================== """
     def get_mIdx(cls, names: list[str]):
