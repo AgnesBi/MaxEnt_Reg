@@ -14,8 +14,8 @@ class MaxEnt:
     """A general-purpose MaxEnt class.
 
     Objects:
-        constraints (np.array[str]): Names of constraints.
-        weights (np.array[float]): Violation profiles for the tableaux.
+        constraints (list[str]): Names of constraints.
+        weights (list[float]): Corresponding weight for each constraint.
 
     Methods:
         sorted_by_weights: Returns sorted (constraint, weight) tuples.
@@ -23,24 +23,44 @@ class MaxEnt:
     """
 
     def __init__(self, constraints, weights):
-        self.const = constraints
-        self.w = weights
+        self._cns = constraints
+        self._cws = weights
+        self._rng = np.random.default_rng()
 
+    # TODO: figure out how we want the string representation to be.
+    def __repr__(self):
+        pass
+
+
+    @property
+    def cns(self):
+        """Accesses constraint names.
+        """
+        return self._cns
+    
+    
+    @property
+    def cws(self):
+        """Accesses constraint weights.
+        """
+        return self._cws
+
+
+    @property
+    def rng(self):
+        """Accesses random generator.
+        """
+        return self._rng
+
+    # TODO: write a unit test for this; and whether we need this as a class method.
     def sorted_by_weights(self):
         """Displays constraints from highest to lowest weights.
 
         Returns:
             list[tuple[str, float]]: a list of (constraint, weight) tuple sorted from highest to lowest weighted.
         """
-        name_weight_pair = {}
-        for cn, cw in zip(self.const, self.w.squeeze()):
-            name_weight_pair[cn] = np.round(cw, 3)
-
-        sorted_pairs = sorted(
-            name_weight_pair.items(), key=lambda x: x[1], reverse=True
-        )
-
-        return sorted_pairs
+        cs_sorted = sorted(zip(self.cns, self.cws), key=lambda x: x[1], reverse=True)
+        return cs_sorted
 
     def compute_probabilities(self, violations):
         """Predicts probabilities for a particular violation profile.
@@ -56,14 +76,15 @@ class MaxEnt:
         marginalization = np.sum(exp, axis=0)
         return exp / marginalization
 
-    def SGD_learn(self, candidates, violations, srs, *regs, iters=10000, eta=0.05):
+    def SGD_learn(self, candidates, violations, srs, *regs, batch_size=1, iters=10000, eta=0.05):
         """Updates constraint weights using SGD.
 
         Args:
-            candidates (np.array[np.array[str]]): candidates considered for each UR.
-            violations (np.array[np.array[int]]): the violation profiles of a list of tableaux.
-            srs (np.array[np.array[float]]): probability of a surface form observed for a given UR.
+            candidates (list[np.array[str]]): candidates considered for each UR.
+            violations (list[np.array[int]]): the violation profiles of a list of tableaux.
+            srs (list[np.array[float]]): probability of a surface form observed for a given UR.
             *regs: a variable number of regularization terms. Can be None.
+            batch_size (int): batch size. Defaults to 1.
             iters (int): how many iterations to perform. Defaults to 10000.
             eta (float): learning rate. Defaults to 0.05.
 
@@ -76,12 +97,12 @@ class MaxEnt:
         # Keeps a history of the change in weights.
         history = [w.squeeze()]
 
+        tableau_n = len(violations)
+        
         # Passes through all the training data in each iteration,
         for _ in range(iters):
             # Generates a random array of indices of the shape (1, length |URs|).
-            training_order = np.random.choice(
-                a=range(len(violations)), size=len(violations), replace=False
-            )
+            training_order = self.rng.choice(a=range(tableau_n), size=tableau_n, replace=False).to_list
 
             dL_dw = 0
 
@@ -90,13 +111,13 @@ class MaxEnt:
                 # Skips the tableaux without a winning candidate.
                 if srs[t].count(None) == len(srs[t]):
                     continue
-
+                
+                #TODO: preprocess srs.
                 # Violation profile of the winning candidate(s).
-                winner_violations = np.zeros(len(self.const))
-                for i, val in enumerate(srs[t]):
-                    if val:
-                        winner_violations = np.array([violations[t][i]]) * val
-
+                winner_violations = np.zeros(self.const.size)
+                probabilities = srs[t]
+                tableau = violations[t]
+                winner_violations = (probabilities * tableau).sum(axis=0)
                 # Computes probability for each candidate given the current weights.
                 P = self.compute_probabilities(violations[t], w)
 
@@ -105,10 +126,10 @@ class MaxEnt:
                     winner_violations - (violations[t] * P).sum(axis=0, keepdims=True)
                 )
 
-            # Incorporates regularization if specified.
-            if regs:
-                for reg in regs:
-                    dL_dw += reg
+                # Incorporates regularization if specified.
+                if regs:
+                    for reg in regs:
+                        dL_dw += reg
 
             # Updates the weights.
             w = w - eta * dL_dw
