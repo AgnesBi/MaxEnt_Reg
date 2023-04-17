@@ -1,4 +1,4 @@
-Final project for 24.981 Computational Phonology (Spring 2021)
+MaxEnt model with regularization
 
-* Implements a Stochastic gradient descent algorithm to find constarint weights in a MaxEnt model.
-* Adds built-in, theoretically motivated bias to the objective function.
+* Write a general-purpose MaxEnt class with the option of learning weights using a stochastic gradient descent algorithm.
+* Tests various built-in, theoretically motivated bias to the objective function, specified in Regularization class.
