@@ -74,9 +74,14 @@ class MaxEnt:
         SGD_learn:
     """
 
-    def __init__(self, constraints, weights):
+    def __init__(self, constraints, weights=None):
+        self._rng = np.random.default_rng()
         self._cns = constraints
-        self._cws = weights
+        self._cws = (
+            self._rng.uniform(0, 10, size=len(constraints))
+            if weights is None
+            else np.asarray(weights)
+        )
 
     # TODO: figure out how we want the string representation to be.
     def __repr__(self):
