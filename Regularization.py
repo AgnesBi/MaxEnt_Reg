@@ -5,9 +5,52 @@ from typing import Union
 import numpy as np
 
 
-""" =============================================================================== 
-                    REGULARIZATION CLASS DEFINITION 
-=============================================================================== """
+""" =================================================================================== 
+                    REGULARIZATION CLASS DEFINITIONS
+=================================================================================== """
+
+
+class Grad:
+    """Baseline Gradient Object. This is a subclass that will be used in superclasses
+    in order to generate the gradient for different distributions. It takes in two
+    arguments:
+
+    (1) ``cns``: np.ndarray -- the constraint names
+    (2) ``grs``: dict -- the group assignments for the constraints and their mu and sigma
+
+    These base objects will then be used by the superclasses to generate the sums
+    needed in each gradient calculation. This object stores the following
+    instance variables:
+
+    (A) ``cg``: dict
+    (B) ``ms``: np.ndarray -- m [groups] x 2 [mu, sigma]
+    """
+
+    def __init__(self, cns, grs):
+        ## Store the constraint names
+        self._cns = cns
+
+        ##
+        self._cg = {g: i for g, (i, _, _) in grs.values()}
+        self._ms = np.array([[m, s] for _, m, s in grs.values()])
+
+    @property
+    def cns(self):
+        return self._cns
+
+    @property
+    def grs(self):
+        return self._grs
+
+
+class NrmGrad:
+    def __init__(self, cns, grs):
+        pass
+
+
+class SumGrad:
+    def __init__(self):
+        pass
 
 
 class Regularization:
@@ -51,12 +94,11 @@ class Regularization:
 
         ## If mu is a float, calculate the same prior over all weights
         if tMu == float:
-            wGrad = (weights - mu) / (sigma ** 2)
-        
-        ## Otherwise, if mu is a dictionary, calculate the prior over 
+            wGrad = (weights - mu) / (sigma**2)
+
+        ## Otherwise, if mu is a dictionary, calculate the prior over
         ## each type. Assume only markedness and faithfulness constraints
         elif tMu == dict:
-            
             ## Get the indices of the markedness and faithfulness constraints
             mIdx = Regularization.get_mIdx(names)
             fIdx = ~mIdx
@@ -122,7 +164,7 @@ class Regularization:
         sigma: float,
     ):
         """Returns the gradient of a prior towards a target difference
-        between the markedness constraints and the faithfulness 
+        between the markedness constraints and the faithfulness
         constraint of greatest weight
         """
         pass
@@ -147,3 +189,16 @@ class Regularization:
 
     def get_fIdx(cls, names: list[str]):
         return np.char.find(names, "*") == -1
+
+
+if __name__ == "__main__":
+    ## Sample Constraints
+    cns = np.asarray(["A", "B", "C"])
+
+    ## Sample Groups
+    grp = [""]
+
+    ## Sample Distributions
+
+    nrm = NrmGrad
+    pass
