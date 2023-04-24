@@ -64,7 +64,9 @@ class Categories:
 
 
 class TGTPrior(Categories):
-    def __init__(self, cns: list, grs: list, mus: list, sms: list):
+    def __init__(
+        self, cns: list[str], grs: list[list[str]], mus: list[float], sms: list[float]
+    ):
         """Target gradient class. Each group is assumed to have individual target
         weights. This class takes in four arguments:
 
@@ -123,7 +125,14 @@ class TGTPrior(Categories):
 
 
 class DIFPrior(Categories):
-    def __init__(self, cns: list, grs: list, mus: list, sms: list, cmp: list):
+    def __init__(
+        self,
+        cns: list[str],
+        grs: list[list[str]],
+        mus: list[float],
+        sms: list[float],
+        cmp: list[list[int]],
+    ):
         """Gradient class. Each group is assumed to have summed target weight differences.
         This class takes in five arguments:
 
