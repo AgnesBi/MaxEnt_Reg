@@ -1,149 +1,200 @@
-## Type hint and labelling
-from typing import Union
-
-## Matrix manipulation
 import numpy as np
 
 
-""" =============================================================================== 
-                    REGULARIZATION CLASS DEFINITION 
-=============================================================================== """
+""" ===================================================================================
+                CONSTRAINT CATEGORIES CLASS DEFINITION 
+=================================================================================== """
 
 
-class Regularization:
+class Categories:
+    def __init__(self, cns: list, grs: list, mus: list, sms: list):
+        """Categories implementation. This class takes in a four arguments:
 
-    """==================== GRADIENTS ========================================="""
+            (1) cns: the list of constraint names
+            (2) grs: the list of constraint names belonging to a group
+            (3) mus: the mus of each target distribution for each group (grs, )
+            (4) sms: the sigmas of each target distribution for each group (grs, )
 
-    """ Static methods for computing the gradient given a set of weights.
-    Unless specified by the paramemter `type`, each method expects there 
-    only two be two constraint types: markedness constraints ("M") and 
-    faithfulness constraints ("F")
-    """
-
-    @staticmethod
-    def grad_uni():
-        """Returns the gradient given a flat prior, or in other words, 0"""
-        return 0
-
-    @staticmethod
-    def grad_nrm(
-        weights: list[float],
-        names: list[str],
-        mu: Union[float, dict[str, float]],
-        sigma: Union[float, dict[str, float]],
-    ):
-        """Returns the gradient of a prior towards a target weight.
-        Generality for both individual types -- e.g. M > F -- versus
-        over all weights -- e.g. M = F = mu
+        The class checks to make sure that any given constraint only belongs
+        to a single group. If it succeeds, both the constraint names as well
+        as the groupings (converted from constraint names to indices) are
+        saved as instance variables.
         """
 
-        ## Retrieve the type of the mu and sigma
-        tMu = type(mu)
-        tSigma = type(sigma)
+        ## Check to make sure that the constraint groupings are disjoint
+        i = set.intersection(*[set(gr) for gr in grs])
+        assert i == set(), f"Groupings are not disjoint: {i} found in multiple groups."
 
-        ## Check that the mu and sigma are of the same type
-        assert (
-            tMu == tSigma
-        ), "Type mismatch: type of mu and sigma are {tMu} and {tSigma}"
+        ## Store the constraints and grouping as instance variables
+        self._cns, self._ncs = np.array(cns), len(cns)
+        self._grs, self._ngs = np.array([np.isin(self.cns, gr) for gr in grs]), len(grs)
 
-        ## Initialize the weight gradient
-        wGrad = np.zeros(weights.shape)
+        ## Store the mus and sigmas as instance variables
+        self._mus = np.array(mus)
+        self._sms = np.array(sms)
 
-        ## If mu is a float, calculate the same prior over all weights
-        if tMu == float:
-            wGrad = (weights - mu) / (sigma ** 2)
-        
-        ## Otherwise, if mu is a dictionary, calculate the prior over 
-        ## each type. Assume only markedness and faithfulness constraints
-        elif tMu == dict:
-            
-            ## Get the indices of the markedness and faithfulness constraints
-            mIdx = Regularization.get_mIdx(names)
-            fIdx = ~mIdx
+    @property
+    def cns(self):
+        return self._cns
 
-            ## Update the gradients of the weights
-            wGrad[mIdx] = (weights[mIdx] - mu["M"]) / (sigma["M"] ** 2)
-            wGrad[fIdx] = (weights[fIdx] - mu["F"]) / (sigma["F"] ** 2)
+    @property
+    def ncs(self):
+        return self._ncs
 
-        ## Return the gradient
-        return wGrad
+    @property
+    def grs(self):
+        return self._grs
 
-    @staticmethod
-    def grad_sum(
-        weights: list[float],
-        names: list[str],
-        mu: float,
-        sigma: float,
-    ):
-        """Returns the gradient of a prior towards a target difference
-        over constraint types -- e.g. markedness.sum() > faithfulness.sum()
+    @property
+    def ngs(self):
+        return self._ngs
+
+    @property
+    def mus(self):
+        return self._mus
+
+    @property
+    def sms(self):
+        return self._sms
+
+
+""" ===================================================================================
+                PRIOR CLASS DEFINITIONS
+=================================================================================== """
+
+
+class TGTPrior(Categories):
+    def __init__(self, cns: list, grs: list, mus: list, sms: list):
+        """Target gradient class. Each group is assumed to have individual target
+        weights. This class takes in four arguments:
+
+            (1) cns: the list of constraint names
+            (2) grs: the list of constraint names belonging to a group
+            (3) mus: the mus of each target distribution for each group (grs, )
+            (4) sms: the sigmas of each target distribution for each group (grs, )
+
+        The class checks to make sure that the number of groups and parameters are
+        identical. If it succeeds, all of the values are saved as instance variables.
         """
 
-        ## Retrieve the type of the mu and sigma
-        tMu = type(mu)
-        tSigma = type(sigma)
+        ## Check to make sure that the number of groups and parameters are the same
+        assert len(grs) == len(mus) == len(sms), "Unequal groups and parameters!"
 
-        ## Under this regularization, we expect only a single mu and sigma
-        assert (
-            tMu == float and tSigma == float
-        ), f"Got type {tMu} and {tSigma} instead of float"
+        ## Inherit from superclass
+        super().__init__(cns, grs, mus, sms)
 
-        ## Check to make sure the constraint weights and shapes are the same shape
-        assert (
-            weights.shape == names.shape
-        ), f"Weights {weights.shape} and names {names.shape} not of equal shape"
+        ## Initialize the mus and sigmas from the list of lists
+        self._vmu = np.full(self.ncs, np.nan)
+        self._vsm = np.full(self.ncs, np.nan)
+        for g, m, s in zip(self.grs, self.mus, self.sms):
+            self._vmu[g] = m
+            self._vsm[g] = s
 
-        ## Get the indices of the markedness and faithfulness constraints
-        mIdx = Regularization.get_mIdx(names)
-        fIdx = ~mIdx
+        ## Get the indices of the relevant constraints. The below code is largely
+        ## redundant, but is included for completeness
+        self._cid = ~np.isnan(self.vmu) & ~np.isnan(self.vsm)
 
-        ## Sum the constraint weights of the markedness vs faithfulness constraints
-        mSummed = weights[mIdx].sum()
-        fSummed = weights[fIdx].sum()
-
-        ## Calculate the gradient of the markedness vs faithfulness constraints
-        mGrad = (mSummed - fSummed - mu) / (sigma**2)
-        fGrad = (fSummed - mSummed + mu) / (sigma**2)
-
-        ## Update the gradients of the weights
-        wGrad = np.zeros(weights.shape)
-        wGrad[mIdx] += mGrad
-        wGrad[fIdx] += fGrad
-
-        ## Return the gradient
-        return wGrad
-
-    @staticmethod
-    def grad_ind(
-        weights: list[float],
-        names: list[str],
-        types: dict[str, str],
-        mu: float,
-        sigma: float,
-    ):
-        """Returns the gradient of a prior towards a target difference
-        between the markedness constraints and the faithfulness 
-        constraint of greatest weight
+    def gradient(self, cws):
+        """Calculates the gradient of the constraint weights given the assigned groups
+        and parameterization of mus and sigmas. Checks to make sure that the constraint
+        weights and constraint parameters are the same size.
         """
-        pass
 
-    @staticmethod
-    def grad_hrc(
-        weights: list[float],
-        names: list[str],
-        types: dict[str, str],
-        mu: dict[str, float],
-        sigma: dict[str, float],
-    ):
-        """Returns the gradient of a prior towards a target difference
-        between a hierarchy of constraints -- e.g. C1 > C2 > C3
+        ## Check to make sure that the number of constraint weights align with the
+        ## number of constraints
+        assert self.ncs == cws.size, f"cns ({self.ncs}) != cws ({cws.size})"
+
+        ## Calculate the gradient for each relevant constraint
+        grd = (self.vmu[self.cid] - cws[self.cid]) / (self.vsm**2)
+
+        return grd
+
+    @property
+    def vmu(self):
+        return self._vmu
+
+    @property
+    def vsm(self):
+        return self._vsm
+
+    @property
+    def cid(self):
+        return self._cid
+
+
+class DIFPrior(Categories):
+    def __init__(self, cns: list, grs: list, mus: list, sms: list, cmp: list):
+        """Gradient class. Each group is assumed to have summed target weight differences.
+        This class takes in five arguments:
+
+            (1) cns: the list of constraint names
+            (2) grs: the list of constraint names belonging to a group
+            (3) mus: the mus of each target distribution for each group (gr - 1, )
+            (4) sms: the sigmas of each target distribution for each group (gr - 1, )
+            (5) cmp: the indices of each group to take difference (gr - 1, 2)
+
+        The class checks to  make sure that the number of groups and parameters are
+        identical. If it succeeds, all of the values are saved as instance variables.
         """
-        pass
 
-    """ ==================== CLASS METHODS ===================================== """
+        ## Check to make sure that the number of groups and parameters are the same
+        assert len(grs) - 1 == len(mus) == len(sms), "Unequal groups and parameters!"
 
-    def get_mIdx(cls, names: list[str]):
-        return np.char.find(names, "*") != -1
+        ## Inherit from superclass
+        super().__init__(cns, grs, mus, sms)
 
-    def get_fIdx(cls, names: list[str]):
-        return np.char.find(names, "*") == -1
+        ## Initialize the group comparisons instance variable
+        self._cmp = cmp
+
+    def gradient(self, cws):
+        """Calculates the gradient of the constraint weights given the assigned groups
+        and parameterization of mus and sigmas. Checks to make sure that the constraint
+        weights and constraint parameters are the same size.
+        """
+
+        ## Check to make sure that the number of constraint weights align with the
+        ## number of constraints
+        assert self.ncs == cws.size, f"cns ({self.ncs}) != cws ({cws.size})"
+
+        ## For each group, sum the constraint weights
+        scw = np.asarray([cws[self.grs[x]].sum() for x in range(self.ngs)])
+
+        ## Calculate the gradient for each relevant pair of groups
+        grd = np.zeros(self.ncs)
+        for i, c in enumerate(self.cmp):
+            ## Retrieve the sums for the group comparison
+            x, y = scw[c]
+
+            ## Compute the difference between the groups
+            dxy = x - y
+            dyx = y - x
+
+            ## Retrieve the mus and sigmas for the group comparison
+            m = self.mus[i]
+            s = self.sms[i]
+
+            ## Update the gradient
+            grd[self.grs[c[0]]] += (dxy - m) / (s**2)
+            grd[self.grs[c[1]]] += (dyx + m) / (s**2)
+
+        return grd
+
+    @property
+    def cmp(self):
+        return self._cmp
+
+
+if __name__ == "__main__":
+    cns = ["A", "B", "C"]
+    grs = [["A"], ["B"], ["C"]]
+    mus = [10, 10, 1]
+    sms = [3, 3, 3]
+
+    x = TGTPrior(cns, grs, mus, sms)
+    print(x.gradient(np.array([100, 50, 0])))
+
+    mus = [5, 5]
+    sms = [3, 3]
+    msg = [[0, 1], [1, 2]]
+    x = DIFPrior(cns, grs, mus, sms, msg)
+    print(x.gradient(np.array([100, 50, 0])))
