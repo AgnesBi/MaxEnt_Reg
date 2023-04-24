@@ -1,9 +1,11 @@
+# Last updated: 04/17/2023
+
 import numpy as np
 
 
 def get_info(
     filename: str,
-) -> tuple[list[str], list[str], list[list[str]], list[list[str]], list[int]]:
+):
     """Reads in a file of OTSoft format and stores the information.
 
     OTSoft format files:
@@ -20,13 +22,16 @@ def get_info(
 
     Sample returns:
 
-        constraints: ['Ident (asp)'  '*dh' '*[-son/+voice]']
+        constraints: ['Ident (asp)', '*dh', '*[-son/+voice]']
 
         urs: ['ta', 'tha', 'ada', 'atha', 'at', 'tada']
 
         candidates: [array(['ta', 'da', 'tha', 'dha'], dtype='<U16'),
                     array(['tha', 'ta', 'da', 'dha'], dtype='<U16'),
                     array(['ada', 'ata', 'atha', 'adha'], dtype='<U16')]
+
+        observed_prob: [np.array([[1/3, 2/3, 0, 0]]),
+                np.array([[0, 1, 0, 0]])]
 
         violations: [array([[0, 0, 0, 0, 0, 0, 0, 0],
                             [0, 1, 0, 1, 0, 0, 1, 0],
@@ -35,12 +40,11 @@ def get_info(
                     array([[0, 0, 0, 0, 0, 0, 0, 1],
                             [1, 0, 1, 0, 0, 0, 0, 0],
                             [1, 1, 1, 1, 0, 0, 1, 0],
-                            [0, 1, 0, 1, 0, 1, 1, 1]])
-
-        wIDx: [0 0 0 None 0 0 1 0 0 0 0]
+                            [0, 1, 0, 1, 0, 1, 1, 1]])]
 
 
     """
+    # Reads in a txt file.
     with open(filename, "r") as f:
         df = f.read()
 
@@ -68,6 +72,17 @@ def get_info(
     # Extracts candidates for each tableau.
     candidates = [df[tableaux[id_range], 1] for id_range, _ in enumerate(tableaux)]
 
+    # Records the observed probabilities for each candidate.
+    observed_prob_str = [
+        df[tableaux[id_range], 2] for id_range, _ in enumerate(tableaux)
+    ]
+
+    observed_prob = []
+    for t in observed_prob_str:
+        # Replaces empty strings with 0's.
+        t[t == ""] = 0
+        observed_prob.append(t.astype(float))
+
     # Extracts violation profiles for each tableau.
     violations_str = []
     for i, _ in enumerate(tableaux):
@@ -79,21 +94,4 @@ def get_info(
         arr = arr.astype(int)
         violations.append(arr)
 
-    # Records the relative index of the winner in each tableau.
-    w_idx = []
-
-    for t in tableaux:
-        count = 0
-        for i, row in enumerate(df[t]):
-            if row[2]:
-                if count == 0:
-                    w_idx.append(i)
-                    count += 1
-                elif count > 1:
-                    raise ValueError(
-                        f"More than 1 winner given for the tableau located at {t}."
-                    )
-        if count == 0:
-            w_idx.append(None)
-
-    return constraints, urs, candidates, violations, w_idx
+    return constraints, urs, candidates, violations, observed_prob
