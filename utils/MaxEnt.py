@@ -48,8 +48,9 @@ def get_weighted_winner_violations(observed_prob, violations):
 
     winner_prob = observed_prob[winner_indices]
     winner_vio = violations[winner_indices]
+    weighted_winner_vio = winner_prob * winner_vio
 
-    return winner_prob * winner_vio
+    return weighted_winner_vio.sum(axis=0, keepdims=True)
 
 
 #
@@ -158,7 +159,7 @@ class MaxEnt:
 
                     # Computes the gradient.
                     dL_dw += np.transpose(
-                        winner_violations - (vio * P).sum(0, keepdims=True)
+                        winner_violations - (vio * P).sum(axis=0, keepdims=True)
                     )
 
                     # Incorporates regularization if specified.
