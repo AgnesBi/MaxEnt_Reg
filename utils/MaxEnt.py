@@ -15,48 +15,41 @@ import random
 # ==================== Helper functions =========================================
 #
 def compute_probabilities(weights, violations):
-    """Predicts probabilities for a particular violation profile.
+    """Predicts probabilities of each candidate in a tableau.
 
     Args:
-        weights (list[float]): Constraint weights.
-        violations (list[np.ndarray[int]]): the violation profiles of a list of tableaux.
+        weights (np.array[float]): Constraint weights; size of (n_constraints, 1).
+        violations (np.ndarray[int]): the violation profiles of a list of tableaux; size of (n_candidates, n_constraints).
 
     Returns:
-        list[np.array[float]]: predicts probability for each candidate of given URs.
+        np.array[float]: predicts probability for each candidate of given URs.
     """
-    predictions = []
 
-    for vio in violations:
-        harmonies = np.dot(vio, weights)
-        exp = np.exp(-harmonies)
-        marginalization = np.sum(exp, axis=0)
-        prob = exp / marginalization
-        predictions.append(prob)
+    harmonies = np.dot(violations, weights)
+    exp = np.exp(-harmonies)
+    marginalization = np.sum(exp, axis=0)
+    prob = exp / marginalization
 
-    return predictions
+    return prob
 
 
 def get_weighted_winner_violations(observed_prob, violations):
-    """_summary_
+    """Given a tableau with one or more winning candidates, calculate the weighted violation profile.
 
     Args:
-        observed_prob (list[np.ndarray[float]]): probability of candidates observed for the given URs.
-        violations (list[np.ndarray[int]]): the violation profiles of a list of tableaux.
+        observed_prob (np.ndarray[float]): probability of candidates observed for the given URs.
+        violations (np.ndarray[int]): the violation profiles of a list of tableaux.
+
     Returns:
-        list[np.ndarray[float]]: the (weighted) violation profile of the winner candidates.
+        np.ndarray[float]: size of (n_winners, n_constraints).
     """
-    if len(observed_prob) != len(violations):
-        raise ValueError(
-            "Input error: the length of the two input lists should be the same."
-        )
 
-    rst = []
-    for i in range(len(observed_prob)):
-        weighted_tab = observed_prob[i].T * violations[i]
-        # Removes the rows with only 0's (i.e., loser candidates).
-        rst.append(weighted_tab[~np.all(weighted_tab == 0, axis=1)])
+    winner_indices = np.any(observed_prob, axis=1)
 
-    return rst
+    winner_prob = observed_prob[winner_indices]
+    winner_vio = violations[winner_indices]
+
+    return winner_prob * winner_vio
 
 
 #
@@ -81,7 +74,7 @@ class MaxEnt:
             self._rng.uniform(0, 10, size=len(constraints))
             if weights is None
             else np.asarray(weights)
-        )
+        ).reshape((len(constraints), 1))
 
     # TODO: figure out how we want the string representation to be.
     def __repr__(self):
@@ -121,6 +114,11 @@ class MaxEnt:
         Returns:
             _type_: _description_
         """
+        if len(observed_prob) != len(violations):
+            raise ValueError(
+                "Input error: the length of the two input lists should be the same."
+            )
+
         # Initialization: begins with the weights that are currently stored.
         weights = self.cws
 
@@ -134,44 +132,47 @@ class MaxEnt:
         for _ in range(iters):
             # Generates a list of random indices of batch_size.
             training_set = random.sample(range(tableaux_count), batch_size)
+            # print(f"Selected tableaux in this batch: {training_set}")
 
             # Tracks gradient.
             dL_dw = 0
 
             for i in training_set:
                 winner_indication_col = observed_prob[i]
-                vio = violations[i]
 
                 # Skips the tableaux without a winning candidate.
                 if not winner_indication_col.any():
                     continue
 
-                # Extracts the violation profile of the winning candidate(s).
-                # Note there might be more than one winning candidate in the case of variation.
-                winner_violations = get_weighted_winner_violations(
-                    winner_indication_col, vio
-                )
+                else:
+                    vio = violations[i]
 
-                # Computes probability for each candidate given the current weights.
-                P = compute_probabilities(weights, vio)
+                    # Extracts the violation profile of the winning candidate(s).
+                    # Note there might be more than one winning candidate in the case of variation.
+                    winner_violations = get_weighted_winner_violations(
+                        winner_indication_col, vio
+                    )
 
-                # Computes the gradient.
-                dL_dw += np.transpose(
-                    winner_violations - (vio * P).sum(axis=0, keepdims=True)
-                )
+                    # Computes probability for each candidate given the current weights.
+                    P = compute_probabilities(weights, vio)
 
-                # Incorporates regularization if specified.
-                if regs:
-                    for reg in regs:
-                        dL_dw += reg
+                    # Computes the gradient.
+                    dL_dw += np.transpose(
+                        winner_violations - (vio * P).sum(0, keepdims=True)
+                    )
+
+                    # Incorporates regularization if specified.
+                    if regs:
+                        for reg in regs:
+                            dL_dw += reg
 
             # Updates the weights.
-            w = w - eta * dL_dw
+            weights = weights - eta * dL_dw
 
             # Replaces negative weights with 0.
-            w[w < 0] = 0
+            weights[weights < 0] = 0
 
             # Store history.
-            history.append(w.squeeze())
+            history.append(weights.squeeze())
 
-        return w, history
+        return weights, history

@@ -30,8 +30,8 @@ def get_info(
                     array(['tha', 'ta', 'da', 'dha'], dtype='<U16'),
                     array(['ada', 'ata', 'atha', 'adha'], dtype='<U16')]
 
-        observed_prob: [np.array([[1/3, 2/3, 0, 0]]),
-                np.array([[0, 1, 0, 0]])]
+        observed_prob: [np.array([[0.25], [0.75], [0.], [0.]]),
+                np.array([[0], [1.], [0.], [0.]])]
 
         violations: [array([[0, 0, 0, 0, 0, 0, 0, 0],
                             [0, 1, 0, 1, 0, 0, 1, 0],
@@ -81,7 +81,9 @@ def get_info(
     for t in observed_prob_str:
         # Replaces empty strings with 0's.
         t[t == ""] = 0
-        observed_prob.append(t.astype(float))
+        prob = t.astype(float)
+        observed_prob.append(prob.reshape((prob.shape[0], 1)))
+    
 
     # Extracts violation profiles for each tableau.
     violations_str = []
