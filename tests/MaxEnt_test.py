@@ -25,7 +25,7 @@ Dataset = namedtuple("Dataset", ["constraints", "weights"])
 @pytest.fixture
 def test_const():
     constraints = ["M1", "M2", "F"]
-    weights = np.asarray([7, 10, 0])
+    weights = np.array([[7], [10], [0]])
     return Dataset(constraints, weights)
 
 
@@ -56,22 +56,38 @@ def test_compute_probabilities(test_const, test_vio):
     exp0 = np.array([math.exp(-7), math.exp(-10), math.exp(0)])
     mar0 = math.exp(-7) + math.exp(-10) + math.exp(0)
     pred0 = exp0 / mar0
-    output0 = MaxEntUtil.compute_probabilities(test_const.weights, test_vio[0])
+    output0 = (
+        MaxEntUtil.compute_probabilities(test_const.weights, test_vio[0])
+        .reshape((1, 3))
+        .squeeze()
+    )
 
     exp1 = np.array([math.exp(-17), math.exp(-10)])
     mar1 = math.exp(-17) + math.exp(-10)
     pred1 = exp1 / mar1
-    output1 = MaxEntUtil.compute_probabilities(test_const.weights, test_vio[1])
+    output1 = (
+        MaxEntUtil.compute_probabilities(test_const.weights, test_vio[1])
+        .reshape((1, 2))
+        .squeeze()
+    )
 
     exp2 = np.array([math.exp(0), math.exp(-20)])
     mar2 = math.exp(0) + math.exp(-20)
     pred2 = exp2 / mar2
-    output2 = MaxEntUtil.compute_probabilities(test_const.weights, test_vio[2])
+    output2 = (
+        MaxEntUtil.compute_probabilities(test_const.weights, test_vio[2])
+        .reshape((1, 2))
+        .squeeze()
+    )
 
     exp3 = np.array([math.exp(-7), math.exp(-10)])
     mar3 = math.exp(-7) + math.exp(-10)
     pred3 = exp3 / mar3
-    output3 = MaxEntUtil.compute_probabilities(test_const.weights, test_vio[3])
+    output3 = (
+        MaxEntUtil.compute_probabilities(test_const.weights, test_vio[3])
+        .reshape((1, 2))
+        .squeeze()
+    )
 
     np.testing.assert_array_equal(output0, pred0)
     np.testing.assert_array_equal(output1, pred1)
@@ -81,7 +97,7 @@ def test_compute_probabilities(test_const, test_vio):
 
 def test_get_weighted_winner_violations(test_probs, test_vio):
     expected = [
-        np.array([[1/3, 2/3, 0]]),
+        np.array([[1 / 3, 2 / 3, 0]]),
         np.array([[0, 1, 1]]),
         np.array([[0, 0, 0]]),
     ]
@@ -99,7 +115,7 @@ def test_accessors(test_const):
     model = MaxEntUtil.MaxEnt(test_const.constraints, test_const.weights)
 
     assert test_const.constraints == model.cns
-    assert test_const.weights.any() == model.cws.any()
+    np.testing.assert_array_equal(test_const.weights, model.cws)
 
 
 def test_sorted_by_weights(test_const):
