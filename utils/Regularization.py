@@ -65,7 +65,11 @@ class Categories:
 
 class TGTPrior(Categories):
     def __init__(
-        self, cns: list[str], grs: list[list[str]], mus: list[float], sms: list[float]
+        self, 
+        cns: list[str], 
+        grs: list[list[str]], 
+        mus: list[float], 
+        sms: list[float]
     ):
         """Target gradient class. Each group is assumed to have individual target
         weights. This class takes in four arguments:
@@ -107,7 +111,7 @@ class TGTPrior(Categories):
         assert self.ncs == cws.size, f"cns ({self.ncs}) != cws ({cws.size})"
 
         ## Calculate the gradient for each relevant constraint
-        grd = (self.vmu[self.cid] - cws[self.cid]) / (self.vsm**2)
+        grd = -(self.vmu[self.cid][:, None] - cws[self.cid]) / (self.vsm[:, None] ** 2)
 
         return grd
 
@@ -185,6 +189,9 @@ class DIFPrior(Categories):
             ## Update the gradient
             grd[self.grs[c[0]]] += (dxy - m) / (s**2)
             grd[self.grs[c[1]]] += (dyx + m) / (s**2)
+
+        ## Fix dimensions
+        grd = grd[:, None]
 
         return grd
 
