@@ -165,7 +165,7 @@ class MaxEnt:
                     # Incorporates regularization if specified.
                     if regs:
                         for reg in regs:
-                            dL_dw += reg
+                            dL_dw += reg.gradient(weights)
 
             # Updates the weights.
             weights = weights - eta * dL_dw
