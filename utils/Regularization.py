@@ -23,7 +23,8 @@ class Categories:
 
         ## Check to make sure that the constraint groupings are disjoint
         i = set.intersection(*[set(gr) for gr in grs])
-        assert i == set(), f"Groupings are not disjoint: {i} found in multiple groups."
+        if len(grs) > 1:
+            assert i == set(), f"Groupings are not disjoint: {i} found in multiple groups."
 
         ## Store the constraints and grouping as instance variables
         self._cns, self._ncs = np.array(cns), len(cns)
