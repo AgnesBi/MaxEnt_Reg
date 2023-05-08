@@ -100,7 +100,7 @@ class MaxEnt:
         return sorted(zip(self.cns, self.cws), key=lambda x: x[1], reverse=True)
 
     def SGD_learn(
-        self, violations, observed_prob, batch_size=1, iters=10000, eta=0.05, *regs
+        self, violations, observed_prob, batch_size=1, iters=100000, eta=0.05, *regs
     ):
         """Updates constraint weights using SGD, with the option of Mini-batch SGD.
 
